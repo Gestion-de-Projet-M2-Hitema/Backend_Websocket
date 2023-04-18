@@ -2,19 +2,13 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { MyError } from "./utils/errors.utils";
-
-// Initialize Websocket types
-interface ClientToServerEvents {
-  "new-message": (data: object) => void;
-}
-interface ServerToClientEvents {
-  error: (data: object) => void;
-}
-interface InterServerEvents {}
-interface SocketData {
-  eventTriggered: string | undefined;
-  userId: string | undefined;
-}
+import {
+  ClientToServerEvents,
+  InterServerEvents,
+  ServerToClientEvents,
+  SocketData,
+  UserSocket,
+} from "./utils/interfaces.utils";
 
 // Initialize websocket server
 const app = express();
@@ -29,6 +23,11 @@ const io = new Server<
     origin: "*",
   },
 });
+
+// Relation between idUser and idSocket
+export const userSockets: Record<string, UserSocket> = {}; // { userId: socketId }
+// Set rooms member
+export const rooms: Record<string, string[]> = {};
 
 // Import Middlewares
 import socketMiddlewares from "./middlewares/websocket.middlewars";
@@ -50,5 +49,14 @@ io.on("connection", (socket) => {
   });
 
   // Client disconnection
-  socket.on("disconnect", () => {});
+  socket.on("disconnect", () => {
+    // Remove user
+    let userId = Object.keys(userSockets).find(
+      (key) => userSockets[key].socket === socket.id
+    );
+
+    if (userId) {
+      delete userSockets[userId];
+    }
+  });
 });

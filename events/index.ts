@@ -33,8 +33,8 @@ function sendNotification(
         to?: idUser | idChannel,
       }
     */
-  const notifTypes: string[] = [];
-  const notifForUser: string[] = [];
+  const notifTypes: string[] = ["friend"];
+  const notifForUser: string[] = ["friend"];
   const notifForChannel: string[] = [];
 
   const error = {

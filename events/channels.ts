@@ -55,7 +55,7 @@ export async function joinChannel(
       : null;
 
     const user: User | undefined = users.find(
-      (user) => user.id == socket.data.userId
+      (user) => user.id == message.user
     );
 
     const dataMessage = {

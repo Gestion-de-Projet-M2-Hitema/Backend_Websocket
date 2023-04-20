@@ -21,17 +21,27 @@ export async function sendMessage(
       content: data.content || undefined,
       image: data.image || undefined,
     };
+    const form = new FormData();
 
-    const message = await pb.collection("messages").create(messageData);
+    form.append("user", socket.data.userId);
+    form.append("channel", socket.data.channelId);
+    if (data.content) {
+      form.append("content", data.content);
+    }
+    if (data.image) {
+      form.append("image", new Blob([data.image]), "image.png");
+    }
+
+    const message = await pb.collection("messages").create(form);
     const newMessage = {
       id: message.id,
       content: message.content,
-      image: null,
+      image: message.image ? pb.files.getUrl(message, message.image) : null,
       user: socket.data.user,
       date: message.created,
     };
 
-    socket.emit("new-message", newMessage);
+    io.to(socket.data.channelId).emit("new-message", newMessage);
   } catch (err) {
     socket.emit("error", error);
     return;

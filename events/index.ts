@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io";
 import { userSockets } from "../app";
 
 import { sendNotification } from "./notifications";
+import { joinChannel } from "./channels";
 
 export default (io: Server, socket: Socket) => {
   socket.on("initialize", (data) => {
@@ -14,9 +15,13 @@ export default (io: Server, socket: Socket) => {
   socket.on("notification", (data) => {
     sendNotification(io, socket, data);
   });
+
+  socket.on("join-channel", (data) => {
+    joinChannel(io, socket, data);
+  });
 };
 
-function leaveAllRooms(socket: Socket) {
+export function leaveAllRooms(socket: Socket) {
   socket.rooms.forEach((idRoom) => {
     if (idRoom === socket.id) return;
     socket.leave(idRoom);

@@ -1,7 +1,6 @@
 import { Socket } from "socket.io";
 import { userChannels, userSockets } from "../app";
 
-import { sendNotification } from "./notifications";
 import { joinChannel, leaveChannel } from "./channels";
 import { sendMessage } from "./messages";
 
@@ -11,10 +10,6 @@ export default function socketControllers(socket: Socket) {
       socket: socket.id,
       room: undefined,
     };
-  });
-
-  socket.on("notification", (data) => {
-    sendNotification(socket, data);
   });
 
   socket.on("join-channel", (data) => {

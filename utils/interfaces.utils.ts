@@ -1,6 +1,5 @@
 export interface ClientToServerEvents {
   initialize: (data: Object) => void;
-  notification: (data: Object) => void;
   "join-channel": (data: object) => void;
   "leave-channel": (data: object) => void;
   "send-message": (data: object) => void;

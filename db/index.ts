@@ -5,7 +5,10 @@ dotenv.config();
 const PocketBase = require("pocketbase/cjs");
 const pb = new PocketBase(process.env.POCKETBASE_URL);
 
-import { listenDatabaseMessages } from "../events/notifications";
+import {
+  listenDatabaseFriendRequests,
+  listenDatabaseMessages,
+} from "../events/notifications";
 
 (async () => {
   // Authenticate to PocketBase
@@ -17,6 +20,9 @@ import { listenDatabaseMessages } from "../events/notifications";
   // Listen to updates in database
   pb.collection("messages").subscribe("*", async function (e: any) {
     await listenDatabaseMessages(pb, e);
+  });
+  pb.collection("friend_requests").subscribe("*", async function (e: any) {
+    await listenDatabaseFriendRequests(pb, e);
   });
 })();
 

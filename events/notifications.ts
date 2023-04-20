@@ -30,3 +30,17 @@ export async function listenDatabaseMessages(pb: any, event: any) {
     } catch (err: any) {}
   }
 }
+
+export async function listenDatabaseFriendRequests(pb: any, event: any) {
+  if (event.action === "create") {
+    const userId = event.record.to;
+
+    // Retrieve the user socket
+    const user = userSockets[userId];
+
+    // Send the notification
+    if (user) {
+      io.to(user.socket).emit("notification", { name: "new-friend-request" });
+    }
+  }
+}

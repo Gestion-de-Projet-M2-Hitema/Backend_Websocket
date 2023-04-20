@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { userSockets } from "../app";
 
 import { sendNotification } from "./notifications";
-import { joinChannel } from "./channels";
+import { joinChannel, leaveChannel } from "./channels";
 
 export default (io: Server, socket: Socket) => {
   socket.on("initialize", (data) => {
@@ -18,6 +18,10 @@ export default (io: Server, socket: Socket) => {
 
   socket.on("join-channel", (data) => {
     joinChannel(io, socket, data);
+  });
+
+  socket.on("leave-channel", () => {
+    leaveChannel(io, socket);
   });
 };
 

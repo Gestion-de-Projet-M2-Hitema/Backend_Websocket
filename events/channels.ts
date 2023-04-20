@@ -70,3 +70,7 @@ export async function joinChannel(
 
   console.log(result);
 }
+
+export function leaveChannel(io: Server, socket: Socket) {
+  leaveAllRooms(socket);
+}

@@ -68,7 +68,7 @@ export async function joinChannel(
     result.push(dataMessage);
   });
 
-  console.log(result);
+  socket.emit("join-channel", result);
 }
 
 export function leaveChannel(io: Server, socket: Socket) {

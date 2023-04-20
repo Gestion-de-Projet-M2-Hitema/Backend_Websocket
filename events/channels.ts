@@ -71,6 +71,10 @@ export async function joinChannel(
   socket.emit("join-channel", result);
 }
 
-export function leaveChannel(io: Server, socket: Socket) {
+export function leaveChannel(
+  io: Server,
+  socket: Socket,
+  data: Record<string, string>
+) {
   leaveAllRooms(socket);
 }

@@ -8,6 +8,7 @@ const pb = new PocketBase(process.env.POCKETBASE_URL);
 import {
   listenDatabaseFriendRequests,
   listenDatabaseMessages,
+  listenDatabaseServerRequests,
 } from "../events/notifications";
 
 (async () => {
@@ -23,6 +24,9 @@ import {
   });
   pb.collection("friend_requests").subscribe("*", async function (e: any) {
     await listenDatabaseFriendRequests(pb, e);
+  });
+  pb.collection("server_requests").subscribe("*", async function (e: any) {
+    await listenDatabaseServerRequests(pb, e);
   });
 })();
 

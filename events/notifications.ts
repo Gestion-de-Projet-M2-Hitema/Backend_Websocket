@@ -31,7 +31,7 @@ export async function listenDatabaseMessages(pb: any, event: any) {
   }
 }
 
-export async function listenDatabaseFriendRequests(pb: any, event: any) {
+export function listenDatabaseFriendRequests(pb: any, event: any) {
   if (event.action === "create") {
     const userId = event.record.to;
 
@@ -42,5 +42,26 @@ export async function listenDatabaseFriendRequests(pb: any, event: any) {
     if (user) {
       io.to(user.socket).emit("notification", { name: "new-friend-request" });
     }
+  }
+}
+
+export async function listenDatabaseServerRequests(pb: any, event: any) {
+  if (event.action === "create") {
+    const serverId = event.record.to;
+
+    try {
+      // Retrieve the server owner
+      const server = await pb.collection("servers").getOne(serverId);
+
+      // Retrieve the user socket
+      const owner = userSockets[server.owner];
+
+      // Send the notification
+      if (owner) {
+        io.to(owner.socket).emit("notification", {
+          name: "new-friend-request",
+        });
+      }
+    } catch (err: any) {}
   }
 }

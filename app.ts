@@ -26,11 +26,11 @@ const io = new Server<
 
 // Relation between idUser and idSocket
 export const userSockets: Record<string, UserSocket> = {}; // { userId: socketId }
-// Set rooms member
-export const rooms: Record<string, string[]> = {};
+// Set channels member
+export const userChannels: Record<string, string> = {};
 
 // Import Middlewares
-import socketMiddlewares from "./middlewares/websocket.middlewars";
+import socketMiddlewares from "./middlewares/index.middleware";
 
 // Import Controllers
 import socketControllers from "./events";

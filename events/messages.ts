@@ -1,7 +1,5 @@
 import pb from "../db";
 import { Server, Socket } from "socket.io";
-import { Message, User } from "../utils/types.utils";
-import { buildSocketError } from "../utils/errors.utils";
 
 export async function sendMessage(
   io: Server,
@@ -15,12 +13,6 @@ export async function sendMessage(
 
   try {
     // Create the message
-    const messageData = {
-      user: socket.data.userId,
-      channel: socket.data.channelId,
-      content: data.content || undefined,
-      image: data.image || undefined,
-    };
     const form = new FormData();
 
     form.append("user", socket.data.userId);
@@ -31,6 +23,8 @@ export async function sendMessage(
     if (data.image) {
       form.append("image", new Blob([data.image]), "image.png");
     }
+
+    console.log(form);
 
     const message = await pb.collection("messages").create(form);
     const newMessage = {

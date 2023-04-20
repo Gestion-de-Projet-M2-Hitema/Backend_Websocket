@@ -22,6 +22,7 @@ const io = new Server<
   cors: {
     origin: "*",
   },
+  maxHttpBufferSize: 1e7, // 10MB
 });
 
 // Relation between idUser and idSocket

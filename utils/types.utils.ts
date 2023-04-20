@@ -14,8 +14,8 @@ export type Message = {
   id: string;
   user: string;
   channel: string;
-  content: string;
-  image: string;
+  content: string | undefined;
+  image: string | undefined;
   url: boolean;
   created: Date;
   updated: Date;

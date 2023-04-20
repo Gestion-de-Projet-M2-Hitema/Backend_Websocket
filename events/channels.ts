@@ -43,6 +43,7 @@ export async function joinChannel(
   // Retrieve all the messages
   const messages = await pb.collection("messages").getFullList({
     filter: `channel="${idChannel}"`,
+    sort: "-created",
   });
 
   const result: Record<string, any>[] = [];

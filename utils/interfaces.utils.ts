@@ -3,11 +3,13 @@ export interface ClientToServerEvents {
   notification: (data: Object) => void;
   "join-channel": (data: object) => void;
   "leave-channel": (data: object) => void;
+  "send-message": (data: object) => void;
 }
 export interface ServerToClientEvents {
   error: (data: object) => void;
   notification: (data: Object) => void;
   "join-channel": (data: object) => void;
+  "new-message": (data: Object) => void;
 }
 export interface InterServerEvents {}
 export interface SocketData {

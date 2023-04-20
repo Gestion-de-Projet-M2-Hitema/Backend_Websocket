@@ -4,7 +4,7 @@ import pb from "../db";
 
 export default (socket: Socket) => {
   socket.use(async ([event, ...args], next) => {
-    if (socket.data.eventTriggered != "join-channel") {
+    if (event !== "join-channel") {
       next();
       return;
     }

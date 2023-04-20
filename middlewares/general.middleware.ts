@@ -1,6 +1,8 @@
 import { Socket } from "socket.io";
 import { buildSocketError } from "../utils/errors.utils";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import pb from "../db";
+import { User } from "../utils/types.utils";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -34,7 +36,15 @@ export default (socket: Socket) => {
           privateKey
         ) as JwtPayload & { id: string };
 
-        socket.data.userId = decoded.id;
+        const user: User = await pb.collection("users").getOne(decoded.id);
+        const avatar = user.avatar ? pb.files.getUrl(user, user.avatar) : null;
+
+        socket.data.userId = user.id;
+        socket.data.user = {
+          id: user.id,
+          username: user.username,
+          avatar: avatar,
+        };
 
         next();
       } catch (err) {

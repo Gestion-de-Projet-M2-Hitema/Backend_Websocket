@@ -24,6 +24,10 @@ export default (io: Server, socket: Socket) => {
   socket.on("leave-channel", (data) => {
     leaveChannel(io, socket, data);
   });
+
+  socket.on("send-message", (data) => {
+    sendMessage(io, socket, data);
+  });
 };
 
 export function leaveAllRooms(socket: Socket) {

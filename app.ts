@@ -10,10 +10,15 @@ import {
   UserSocket,
 } from "./utils/interfaces.utils";
 
+// Initialize event source
+const eventsource = require("eventsource");
+
+global.EventSource = eventsource;
+
 // Initialize websocket server
 const app = express();
 export const httpServer = createServer(app);
-const io = new Server<
+export const io = new Server<
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
@@ -26,7 +31,7 @@ const io = new Server<
 });
 
 // Relation between idUser and idSocket
-export const userSockets: Record<string, UserSocket> = {}; // { userId: socketId }
+export const userSockets: Record<string, UserSocket> = {}; // { userId: {socket: socketId, room: room} }
 // Set channels member
 export const userChannels: Record<string, string> = {};
 
@@ -39,7 +44,7 @@ import socketControllers from "./events";
 // Websocket Manager
 io.on("connection", (socket) => {
   socketMiddlewares(socket);
-  socketControllers(io, socket);
+  socketControllers(socket);
 
   // Manage Error
   socket.on("error", (err) => {
@@ -58,6 +63,7 @@ io.on("connection", (socket) => {
 
     if (userId) {
       delete userSockets[userId];
+      delete userChannels[userId];
     }
   });
 });

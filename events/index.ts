@@ -1,11 +1,11 @@
-import { Server, Socket } from "socket.io";
+import { Socket } from "socket.io";
 import { userChannels, userSockets } from "../app";
 
 import { sendNotification } from "./notifications";
 import { joinChannel, leaveChannel } from "./channels";
 import { sendMessage } from "./messages";
 
-export default (io: Server, socket: Socket) => {
+export default function socketControllers(socket: Socket) {
   socket.on("initialize", (data) => {
     userSockets[socket.data.userId] = {
       socket: socket.id,
@@ -14,21 +14,21 @@ export default (io: Server, socket: Socket) => {
   });
 
   socket.on("notification", (data) => {
-    sendNotification(io, socket, data);
+    sendNotification(socket, data);
   });
 
   socket.on("join-channel", (data) => {
-    joinChannel(io, socket, data);
+    joinChannel(socket, data);
   });
 
   socket.on("leave-channel", (data) => {
-    leaveChannel(io, socket, data);
+    leaveChannel(socket, data);
   });
 
   socket.on("send-message", (data) => {
-    sendMessage(io, socket, data);
+    sendMessage(socket, data);
   });
-};
+}
 
 export function leaveAllRooms(socket: Socket) {
   socket.rooms.forEach((idRoom) => {

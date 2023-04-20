@@ -1,8 +1,8 @@
 import pb from "../db";
-import { Server, Socket } from "socket.io";
+import { Socket } from "socket.io";
+import { io } from "../app";
 
 export async function sendMessage(
-  io: Server,
   socket: Socket,
   data: Record<string, string>
 ) {
@@ -23,8 +23,6 @@ export async function sendMessage(
     if (data.image) {
       form.append("image", new Blob([data.image]), "image.png");
     }
-
-    console.log(form);
 
     const message = await pb.collection("messages").create(form);
     const newMessage = {

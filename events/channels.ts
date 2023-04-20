@@ -1,11 +1,10 @@
 import pb from "../db";
-import { Server, Socket } from "socket.io";
+import { Socket } from "socket.io";
 import { leaveAllRooms } from ".";
 import { userChannels } from "../app";
 import { Message, User } from "../utils/types.utils";
 
 export async function joinChannel(
-  io: Server,
   socket: Socket,
   data: Record<string, string>
 ) {
@@ -72,10 +71,6 @@ export async function joinChannel(
   socket.emit("join-channel", result);
 }
 
-export function leaveChannel(
-  io: Server,
-  socket: Socket,
-  data: Record<string, string>
-) {
+export function leaveChannel(socket: Socket, data: Record<string, string>) {
   leaveAllRooms(socket);
 }

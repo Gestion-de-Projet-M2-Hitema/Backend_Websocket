@@ -59,7 +59,7 @@ export async function listenDatabaseServerRequests(pb: any, event: any) {
       // Send the notification
       if (owner) {
         io.to(owner.socket).emit("notification", {
-          name: "new-friend-request",
+          name: "new-server-request",
         });
       }
     } catch (err: any) {}
